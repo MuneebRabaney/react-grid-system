@@ -1,0 +1,49 @@
+var path = require('path')
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
+module.exports = (options, req) => ({
+  env: {
+    APP_NAME: 'Jungle Oats',
+    APP_ENV: 'local',
+    APP_DEBUG: 'true',
+    FACEBOOK_APP_ID: 170518933603501,
+    TWITTER_POPUP_WIDTH: 550,
+    TWITTER_POPUP_HEIGHT: 445,
+    BREAKPOINT_TABLET: 1100,
+    BREAKPOINT_MOBILE: 500,
+    // API_BASE_URL: 'https://jungleoatsweb.liqstage.co.za/cms/wp-admin/',
+    // API_SEARCH_BASE_URL: 'https://jungleoatsweb.liqstage.co.za/'
+  },
+  html: {
+    filename: (options.mode === 'production') ? '../../resources/views/index.blade.php' : 'index.html',
+    template: './html/index.ejs'
+  },
+  dist: '../public/assets/',
+  copy: false,
+  webpack(config) {
+    if (options.mode === 'production') {
+      config.output.publicPath = '/assets/'
+      config.plugins.push(new UglifyJsPlugin({
+        uglifyOptions: {
+          comments: false,
+          compress: {
+            warnings: false,
+            drop_console: true
+          }
+        }
+      }))
+    }
+    config.resolve.alias = {
+      '@': path.resolve(__dirname)
+    }
+    config.module.rules.push({
+      test: /\.(pdf)(\?.*)?$/,
+      loader: 'url-loader',
+      options: {
+        limit: 10000,
+        name: 'assets/pdf/[name].[hash:8].[ext]'
+      }
+    })
+    return config
+  }
+})

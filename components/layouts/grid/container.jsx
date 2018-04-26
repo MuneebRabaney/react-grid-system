@@ -27,7 +27,6 @@ const Container = styled.div`
     padding-right: 0;
   `)}
   ${setMaxWidth(window)}
-  ${({ styles }) => styles}
 `
 
 export default Container
