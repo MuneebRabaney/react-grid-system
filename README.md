@@ -1,2 +1,2 @@
-# react-grid-system
+# React Grid System
 A grid system to improve speed of development. Based off Twitter Bootstrap's container, row, column pattern
